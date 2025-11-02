@@ -1,17 +1,26 @@
 import React from 'react';
+// @ts-ignore
 import Plot from 'react-plotly.js';
 
-function Graph3D({ data }) {
+interface Graph3DProps {
+  data: {
+    x: number[];
+    y: number[];
+    z: number[][];
+  };
+}
+
+const Graph3D: React.FC<Graph3DProps> = ({ data }) => {
   return (
     <Plot
-      data={[{
-        type: 'surface',
-        z: data.z,
-        x: data.x,
-        y: data.y,
-        colorscale: 'RdBu',
-        reversescale: true,
-      }]}
+      data={[
+        {
+          z: data.z,
+          x: data.x,
+          y: data.y,
+          type: 'surface' as const
+        }
+      ]}
       layout={{
         title: 'pH Surface Plot',
         autosize: true,
@@ -23,6 +32,6 @@ function Graph3D({ data }) {
       }}
     />
   );
-}
+};
 
 export default Graph3D;
