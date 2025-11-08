@@ -27,7 +27,7 @@ function Home() {
   };
 
   const handlePointClick = (clickedPoint: { x: number; y: number; z: number }) => {
-        setPoints(prev => [...prev, clickedPoint]);
+        setPoints([clickedPoint]);
 
         const clickedPh = clickedPoint.z;
         const pairs: { bicarb: number; pco2: number }[] = [];
