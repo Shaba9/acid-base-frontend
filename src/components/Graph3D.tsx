@@ -30,10 +30,15 @@ const Graph3D: React.FC<Graph3DProps> = ({ data, points = [] }) => {
           type: 'scatter3d',
           marker: {
             color: 'red',
-            size: 5,
-            symbol: 'circle'
+            size: 8,
+            symbol: 'circle',
+            opacity: 0.9,
+            line: {
+              color: 'darkred',
+              width: 1
+            }
           },
-          name: 'Calculated Points'
+          name: 'Latest Point'
         }
       ]}
       layout={{
