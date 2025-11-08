@@ -43,13 +43,70 @@ function Home() {
     <div style={{ display: 'flex', flexDirection: 'row', gap: '2rem' }}>
       <div style={{ flex: 2 }}>
         <h1>Acid-Base Balance Visualizer</h1>
-        <Sliders
-          bicarbonate={bicarbonate}
-          setBicarbonate={setBicarbonate}
-          pco2={pco2}
-          setPco2={setPco2}
-        />
-        <p>Calculated pH: {ph}</p>
+
+        <div style={{ marginBottom: '1rem' }}>
+          <label>
+            Bicarbonate [HCO₃⁻]:&nbsp;
+            <input
+              type="range"
+              min="10"
+              max="40"
+              value={bicarbonate}
+              onChange={(e) => setBicarbonate(Number(e.target.value))}
+            />
+            &nbsp;
+            <input
+              type="number"
+              min="10"
+              max="40"
+              value={bicarbonate}
+              onChange={(e) => setBicarbonate(Number(e.target.value))}
+              style={{ width: '60px' }}
+            />
+            &nbsp;mEq/L
+          </label>
+        </div>
+
+        <div style={{ marginBottom: '1rem' }}>
+          <label>
+            pCO₂:&nbsp;
+            <input
+              type="range"
+              min="20"
+              max="80"
+              value={pco2}
+              onChange={(e) => setPco2(Number(e.target.value))}
+            />
+            &nbsp;
+            <input
+              type="number"
+              min="20"
+              max="80"
+              value={pco2}
+              onChange={(e) => setPco2(Number(e.target.value))}
+              style={{ width: '60px' }}
+            />
+            &nbsp;mmHg
+          </label>
+        </div>
+
+        <p>
+          Calculated pH:&nbsp;
+          <input
+            type="number"
+            step="0.01"
+            value={ph ?? ''}
+            onChange={(e) => {
+              const newPh = parseFloat(e.target.value);
+              if (!isNaN(newPh)) {
+                setPh(newPh);
+                handlePointClick({ x: 0, y: 0, z: newPh }); // dummy x/y, only z used
+              }
+            }}
+            style={{ width: '60px' }}
+          />
+        </p>
+
         <Graph3D data={generateSurfaceData()} points={points} onPointClick={handlePointClick} />
       </div>
 
