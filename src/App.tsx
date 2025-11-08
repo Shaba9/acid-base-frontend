@@ -5,12 +5,17 @@ import Sliders from './components/Sliders';
 function App() {
   const [bicarbonate, setBicarbonate] = useState(24);
   const [pco2, setPco2] = useState(40);
-  const [ph, setPh] = useState(null);
+  const [ph, setPh] = useState<number | null>(null);
+  const [points, setPoints] = useState<{ x: number; y: number; z: number }[]>([]);
 
   useEffect(() => {
     fetch(`http://localhost:8000/calculate-ph?bicarbonate=${bicarbonate}&pco2=${pco2}`)
       .then(res => res.json())
-      .then(data => setPh(data.pH));
+      .then(data => {
+        const newPh = data.pH;
+        setPh(newPh);
+        setPoints([{ x: bicarbonate, y: pco2, z: newPh }]); // overwrite with latest point
+      });
   }, [bicarbonate, pco2]);
 
   const generateSurfaceData = () => {
@@ -23,9 +28,14 @@ function App() {
   return (
     <div>
       <h1>Acid-Base Balance Visualizer</h1>
-      <Sliders bicarbonate={bicarbonate} setBicarbonate={setBicarbonate} pco2={pco2} setPco2={setPco2} />
+      <Sliders
+        bicarbonate={bicarbonate}
+        setBicarbonate={setBicarbonate}
+        pco2={pco2}
+        setPco2={setPco2}
+      />
       <p>Calculated pH: {ph}</p>
-      <Graph3D data={generateSurfaceData()} />
+      <Graph3D data={generateSurfaceData()} points={points} />
     </div>
   );
 }

@@ -8,9 +8,10 @@ interface Graph3DProps {
     y: number[];
     z: number[][];
   };
+  points?: { x: number; y: number; z: number }[];
 }
 
-const Graph3D: React.FC<Graph3DProps> = ({ data }) => {
+const Graph3D: React.FC<Graph3DProps> = ({ data, points = [] }) => {
   return (
     <Plot
       data={[
@@ -18,7 +19,21 @@ const Graph3D: React.FC<Graph3DProps> = ({ data }) => {
           z: data.z,
           x: data.x,
           y: data.y,
-          type: 'surface' as const
+          type: 'surface' as const,
+          name: 'pH Surface'
+        },
+        {
+          x: points.map(p => p.x),
+          y: points.map(p => p.y),
+          z: points.map(p => p.z),
+          mode: 'markers',
+          type: 'scatter3d',
+          marker: {
+            color: 'red',
+            size: 5,
+            symbol: 'circle'
+          },
+          name: 'Calculated Points'
         }
       ]}
       layout={{
