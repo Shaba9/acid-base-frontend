@@ -27,45 +27,47 @@ function Home() {
   };
 
   const handlePointClick = async (clickedPoint: { x: number; y: number; z: number }) => {
-        setPoints([clickedPoint]);
+    setPoints([clickedPoint]);
 
-        try {
-            const response = await fetch(`http://localhost:8000/matching-pairs?pH=${clickedPoint.z}`);
-            const data = await response.json();
-            setMatchingPairs(data.pairs);
-        } catch (error) {
-            console.error('Error fetching matching pairs:', error);
-            setMatchingPairs([]);
-        }
-    };
+    try {
+      const response = await fetch(`http://localhost:8000/matching-pairs?pH=${clickedPoint.z}`);
+      const data = await response.json();
+      setMatchingPairs(data.pairs);
+    } catch (error) {
+      console.error('Error fetching matching pairs:', error);
+      setMatchingPairs([]);
+    }
+  };
 
   return (
-    <div>
-      <h1>Acid-Base Balance Visualizer</h1>
-      <Sliders
-        bicarbonate={bicarbonate}
-        setBicarbonate={setBicarbonate}
-        pco2={pco2}
-        setPco2={setPco2}
-      />
-      <p>Calculated pH: {ph}</p>
-      <Graph3D data={generateSurfaceData()} points={points} onPointClick={handlePointClick} />
+    <div style={{ display: 'flex', flexDirection: 'row', gap: '2rem' }}>
+      <div style={{ flex: 2 }}>
+        <h1>Acid-Base Balance Visualizer</h1>
+        <Sliders
+          bicarbonate={bicarbonate}
+          setBicarbonate={setBicarbonate}
+          pco2={pco2}
+          setPco2={setPco2}
+        />
+        <p>Calculated pH: {ph}</p>
+        <Graph3D data={generateSurfaceData()} points={points} onPointClick={handlePointClick} />
+      </div>
 
       {matchingPairs.length > 0 && (
-        <div>
+        <div style={{ flex: 1, overflowY: 'auto', maxHeight: '80vh' }}>
           <h2>Matching [HCO₃⁻] and pCO₂ for selected pH</h2>
-          <table>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                <th>Bicarbonate (mEq/L)</th>
-                <th>pCO₂ (mmHg)</th>
+                <th style={{ borderBottom: '1px solid #ccc' }}>Bicarbonate (mEq/L)</th>
+                <th style={{ borderBottom: '1px solid #ccc' }}>pCO₂ (mmHg)</th>
               </tr>
             </thead>
             <tbody>
               {matchingPairs.map((pair, index) => (
                 <tr key={index}>
-                  <td>{pair.bicarb}</td>
-                  <td>{pair.pco2}</td>
+                  <td style={{ padding: '4px 8px' }}>{pair.bicarb}</td>
+                  <td style={{ padding: '4px 8px' }}>{pair.pco2}</td>
                 </tr>
               ))}
             </tbody>
