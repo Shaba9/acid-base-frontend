@@ -26,22 +26,17 @@ function Home() {
     return { x, y, z };
   };
 
-  const handlePointClick = (clickedPoint: { x: number; y: number; z: number }) => {
+  const handlePointClick = async (clickedPoint: { x: number; y: number; z: number }) => {
         setPoints([clickedPoint]);
 
-        const clickedPh = clickedPoint.z;
-        const pairs: { bicarb: number; pco2: number }[] = [];
-
-        for (let b = 10; b <= 40; b++) {
-            for (let p = 20; p <= 80; p++) {
-            const calcPh = 6.1 + Math.log10(b / (0.03 * p));
-            if (Math.abs(calcPh - clickedPh) < 0.01) {
-                pairs.push({ bicarb: b, pco2: p });
-            }
-            }
+        try {
+            const response = await fetch(`http://localhost:8000/matching-pairs?pH=${clickedPoint.z}`);
+            const data = await response.json();
+            setMatchingPairs(data.pairs);
+        } catch (error) {
+            console.error('Error fetching matching pairs:', error);
+            setMatchingPairs([]);
         }
-
-        setMatchingPairs(pairs);
     };
 
   return (
