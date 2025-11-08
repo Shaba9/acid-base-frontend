@@ -9,9 +9,18 @@ interface Graph3DProps {
     z: number[][];
   };
   points?: { x: number; y: number; z: number }[];
+  onPointClick?: (ph: number) => void;
 }
 
-const Graph3D: React.FC<Graph3DProps> = ({ data, points = [] }) => {
+const Graph3D: React.FC<Graph3DProps> = ({ data, points = [], onPointClick }) => {
+  const handleClick = (event: any) => {
+    const point = event.points?.[0];
+    if (point && onPointClick) {
+      const ph = point.z;
+      onPointClick(ph);
+    }
+  };
+
   return (
     <Plot
       data={[
@@ -29,13 +38,13 @@ const Graph3D: React.FC<Graph3DProps> = ({ data, points = [] }) => {
           mode: 'markers',
           type: 'scatter3d',
           marker: {
-            color: 'red',
-            size: 8,
+            color: 'rgba(255, 0, 0, 1)',
+            size: 10,
             symbol: 'circle',
-            opacity: 0.9,
+            opacity: 1,
             line: {
-              color: 'darkred',
-              width: 1
+              color: 'rgba(255, 100, 100, 0.6)',
+              width: 10
             }
           },
           name: 'Latest Point'
@@ -50,6 +59,7 @@ const Graph3D: React.FC<Graph3DProps> = ({ data, points = [] }) => {
           zaxis: { title: 'pH' }
         }
       }}
+      onClick={handleClick}
     />
   );
 };
