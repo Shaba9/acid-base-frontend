@@ -9,15 +9,15 @@ interface Graph3DProps {
     z: number[][];
   };
   points?: { x: number; y: number; z: number }[];
-  onPointClick?: (ph: number) => void;
+  onPointClick?: (point: { x: number; y: number; z: number }) => void;
 }
 
 const Graph3D: React.FC<Graph3DProps> = ({ data, points = [], onPointClick }) => {
   const handleClick = (event: any) => {
     const point = event.points?.[0];
     if (point && onPointClick) {
-      const ph = point.z;
-      onPointClick(ph);
+      const { x, y, z } = point;
+      onPointClick({ x, y, z });
     }
   };
 

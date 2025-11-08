@@ -26,20 +26,23 @@ function Home() {
     return { x, y, z };
   };
 
-  const handlePointClick = (clickedPh: number) => {
-    const pairs: { bicarb: number; pco2: number }[] = [];
+  const handlePointClick = (clickedPoint: { x: number; y: number; z: number }) => {
+        setPoints(prev => [...prev, clickedPoint]);
 
-    for (let b = 10; b <= 40; b++) {
-      for (let p = 20; p <= 80; p++) {
-        const calcPh = 6.1 + Math.log10(b / (0.03 * p));
-        if (Math.abs(calcPh - clickedPh) < 0.01) {
-          pairs.push({ bicarb: b, pco2: p });
+        const clickedPh = clickedPoint.z;
+        const pairs: { bicarb: number; pco2: number }[] = [];
+
+        for (let b = 10; b <= 40; b++) {
+            for (let p = 20; p <= 80; p++) {
+            const calcPh = 6.1 + Math.log10(b / (0.03 * p));
+            if (Math.abs(calcPh - clickedPh) < 0.01) {
+                pairs.push({ bicarb: b, pco2: p });
+            }
+            }
         }
-      }
-    }
 
-    setMatchingPairs(pairs);
-  };
+        setMatchingPairs(pairs);
+    };
 
   return (
     <div>
