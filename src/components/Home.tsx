@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Graph3D from './Graph3D';
 
@@ -36,7 +37,7 @@ function Home() {
       <div style={{ flex: 2 }}>
         <h1>Alveolar Ventilation & Acid-Base Balance</h1>
 
-        {/* Sliders and Inputs */}
+        {/* Alveolar Ventilation */}
         <div style={{ marginBottom: '1rem' }}>
           <label>
             Alveolar Ventilation (VA):&nbsp;
@@ -48,10 +49,20 @@ function Home() {
               value={va}
               onChange={(e) => setVa(Number(e.target.value))}
             />
-            &nbsp;{va} L/min
+            &nbsp;
+            <input
+              type="number"
+              min="1"
+              max="15"
+              step="0.1"
+              value={va}
+              onChange={(e) => setVa(Number(e.target.value))}
+              style={{ width: '80px', marginLeft: '8px' }}
+            /> L/min
           </label>
         </div>
 
+        {/* CO₂ Production */}
         <div style={{ marginBottom: '1rem' }}>
           <label>
             CO₂ Production (VCO₂):&nbsp;
@@ -63,10 +74,20 @@ function Home() {
               value={vco2}
               onChange={(e) => setVco2(Number(e.target.value))}
             />
-            &nbsp;{vco2} mL/min
+            &nbsp;
+            <input
+              type="number"
+              min="100"
+              max="1200"
+              step="10"
+              value={vco2}
+              onChange={(e) => setVco2(Number(e.target.value))}
+              style={{ width: '80px', marginLeft: '8px' }}
+            /> mL/min
           </label>
         </div>
 
+        {/* Bicarbonate */}
         <div style={{ marginBottom: '1rem' }}>
           <label>
             Bicarbonate [HCO₃⁻]:&nbsp;
@@ -78,7 +99,16 @@ function Home() {
               value={bicarbonate}
               onChange={(e) => setBicarbonate(Number(e.target.value))}
             />
-            &nbsp;{bicarbonate} mEq/L
+            &nbsp;
+            <input
+              type="number"
+              min="10"
+              max="40"
+              step="1"
+              value={bicarbonate}
+              onChange={(e) => setBicarbonate(Number(e.target.value))}
+              style={{ width: '80px', marginLeft: '8px' }}
+            /> mEq/L
           </label>
         </div>
 
