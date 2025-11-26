@@ -9,8 +9,11 @@ function Home() {
   const [pco2, setPco2] = useState<number | null>(null);
   const [ph, setPh] = useState<number | null>(null);
   const [points, setPoints] = useState<{ x: number; y: number; z: number }[]>([]);
+  const [matchingCombos, setMatchingCombos] = useState<
+    { bicarbonate: number; vco2: number; va: number; pco2: number }[]
+  >([]);
 
-  // Calculate PaCO2 and fetch pH whenever inputs change
+  // Calculate PaCO2 and fetch pH whenever VA, VCO2, or bicarbonate changes
   useEffect(() => {
     const newPaCO2 = (vco2 * 0.863) / va; // mmHg
     setPco2(newPaCO2);
@@ -23,6 +26,18 @@ function Home() {
         setPoints([{ x: bicarbonate, y: newPaCO2, z: newPh }]);
       });
   }, [bicarbonate, va, vco2]);
+
+  // Fetch matching combinations when pH is manually entered
+  const handlePhInput = (value: string) => {
+    const newPh = parseFloat(value);
+    if (!isNaN(newPh)) {
+      setPh(newPh);
+      fetch(`http://localhost:8000/matching-combos?pH=${newPh}`)
+        .then(res => res.json())
+        .then(data => setMatchingCombos(data.combos))
+        .catch(err => console.error('Error fetching combos:', err));
+    }
+  };
 
   // Generate surface data for graph
   const generateSurfaceData = () => {
@@ -112,6 +127,20 @@ function Home() {
           </label>
         </div>
 
+        {/* pH Input */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label>
+            Target pH:&nbsp;
+            <input
+              type="number"
+              step="0.01"
+              value={ph ?? ''}
+              onChange={(e) => handlePhInput(e.target.value)}
+              style={{ width: '80px', marginLeft: '8px' }}
+            />
+          </label>
+        </div>
+
         {/* Display calculated values */}
         <div style={{ marginTop: '1rem', fontSize: '1.2rem' }}>
           <p>PaCO₂: {pco2?.toFixed(1)} mmHg</p>
@@ -120,6 +149,31 @@ function Home() {
 
         {/* 3D Graph */}
         <Graph3D data={generateSurfaceData()} points={points} />
+      </div>
+
+      {/* Table of matching combos */}
+      <div style={{ flex: 1, overflowY: 'auto', maxHeight: '80vh' }}>
+        <h2>Matching Combinations for pH {ph}</h2>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr>
+              <th style={{ borderBottom: '1px solid #ccc' }}>HCO₃⁻ (mEq/L)</th>
+              <th style={{ borderBottom: '1px solid #ccc' }}>VCO₂ (mL/min)</th>
+              <th style={{ borderBottom: '1px solid #ccc' }}>VA (L/min)</th>
+              <th style={{ borderBottom: '1px solid #ccc' }}>PaCO₂ (mmHg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {matchingCombos.map((combo, index) => (
+              <tr key={index}>
+                <td style={{ padding: '4px 8px' }}>{combo.bicarbonate}</td>
+                <td style={{ padding: '4px 8px' }}>{combo.vco2}</td>
+                <td style={{ padding: '4px 8px' }}>{combo.va}</td>
+                <td style={{ padding: '4px 8px' }}>{combo.pco2.toFixed(1)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
