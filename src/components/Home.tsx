@@ -58,7 +58,7 @@ function Home() {
             <input
               type="range"
               min="100"
-              max="400"
+              max="1200"
               step="10"
               value={vco2}
               onChange={(e) => setVco2(Number(e.target.value))}
@@ -84,7 +84,8 @@ function Home() {
 
         {/* Display calculated values */}
         <div style={{ marginTop: '1rem', fontSize: '1.2rem' }}>
-          <p>PaCO₂: {pco2?.toFixed(1)} mmHg | pH: {ph}</p>
+          <p>PaCO₂: {pco2?.toFixed(1)} mmHg</p>
+          <p>pH: {ph}</p>
         </div>
 
         {/* 3D Graph */}
