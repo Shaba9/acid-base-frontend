@@ -13,8 +13,8 @@ const Sliders: React.FC<SlidersProps> = ({ bicarbonate, setBicarbonate, pco2, se
       <label>Bicarbonate [HCO₃⁻]: {bicarbonate} mEq/L</label>
       <input
         type="range"
-        min="10"
-        max="40"
+        min="22"
+        max="28"
         value={bicarbonate}
         onChange={(e) => setBicarbonate(Number(e.target.value))}
       />
@@ -22,8 +22,8 @@ const Sliders: React.FC<SlidersProps> = ({ bicarbonate, setBicarbonate, pco2, se
       <label>pCO₂: {pco2} mmHg</label>
       <input
         type="range"
-        min="20"
-        max="80"
+        min="35"
+        max="45"
         value={pco2}
         onChange={(e) => setPco2(Number(e.target.value))}
       />
